@@ -53,7 +53,7 @@ def health():
 @app.get("/hello", response_class=PlainTextResponse)
 def hello():
     nombre = os.getenv("NOMBRE", "Yrving Leon")
-    return f"Hola, bienvenido al microservicio de Grupo Padova. Soy {nombre}"
+    return f"Hola, bienvenido al microservicio api-obras de Grupo Padova (nueva version). Soy {nombre}"
 
 
 @app.get("/variable", response_class=PlainTextResponse)
