@@ -7,6 +7,5 @@ __pycache__/
 Dockerfile
 .dockerignore
 README.md
-docs/
 scripts/
 sql/

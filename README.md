@@ -42,12 +42,10 @@ Ninguna credencial está en el código ni en la imagen.
 app/main.py               código del microservicio
 requirements.txt          dependencias con versión fija
 Dockerfile                multi-stage, python:3.12-slim, COPY selectivo, usuario no root, HEALTHCHECK, puerto 8080
-comandos.md               comandos del proyecto en el orden en que se usan
 .dockerignore             deja fuera de la imagen lo que no es código
 sql/seed.sql              tabla dbo.proyectos + datos (se ejecuta en el Query editor)
 scripts/deploy.ps1        build -> tag rama-commit -> push al ACR -> az containerapp update -> valida
 .github/workflows/ci.yml  CI: lint, prueba de endpoints, hadolint, docker build
-docs/cicd.md              diagrama del flujo CI/CD
 ```
 
 ## Ejecutar en local
@@ -83,6 +81,6 @@ El tag de la imagen es `<rama>-<commit corto>` (por ejemplo `main-a1b2c3d`). Cad
 
 ## CI/CD
 
-Ver `docs/cicd.md`. En resumen:
+El diagrama del flujo está en el documento de entrega. En resumen:
 - **CI:** se gatilla con cada Pull Request y cada push a `main` (GitHub Actions).
 - **CD:** `deploy.ps1` publica la imagen en el ACR y despliega con `az containerapp update`.

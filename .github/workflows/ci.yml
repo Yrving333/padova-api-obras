@@ -1,7 +1,7 @@
 # CI: se gatilla con cada Pull Request a main y con cada push a main.
 # Valida que el codigo y el Dockerfile esten sanos ANTES de desplegar.
 # El CD (publicar en ACR y desplegar en Container Apps) lo hace scripts/deploy.ps1 con az cli,
-# como recomendo el profesor (sin Service Principal para este trabajo). Ver docs/cicd.md.
+# como recomendo el profesor (sin Service Principal para este trabajo).
 name: ci-api-obras
 
 on:
