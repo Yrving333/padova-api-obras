@@ -1,0 +1,42 @@
+# CI: se gatilla con cada Pull Request a main y con cada push a main.
+# Valida que el codigo y el Dockerfile esten sanos ANTES de desplegar.
+# El CD (publicar en ACR y desplegar en Container Apps) lo hace scripts/deploy.ps1 con az cli,
+# como recomendo el profesor (sin Service Principal para este trabajo). Ver docs/cicd.md.
+name: ci-api-obras
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt ruff httpx
+
+      - name: Lint del codigo
+        run: ruff check app
+
+      - name: Prueba rapida de endpoints
+        env:
+          MI_VARIABLE: ci
+        run: |
+          python -c "from fastapi.testclient import TestClient; from app.main import app; c=TestClient(app); assert c.get('/hello').status_code==200; assert c.get('/variable').status_code==200; assert c.get('/health').status_code==200; print('OK')"
+
+      - name: Lint del Dockerfile (hadolint)
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          failure-threshold: error
+
+      - name: Build de la imagen (sin push)
+        run: docker build --platform linux/amd64 --build-arg APP_VERSION=ci-${GITHUB_SHA::7} -t api-obras:ci .
